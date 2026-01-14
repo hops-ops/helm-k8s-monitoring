@@ -2,6 +2,13 @@
 #
 # Helm release for Grafana k8s-monitoring
 #
+# Integration defaults:
+# - Destinations configured for local Prometheus, Loki, Tempo (in monitoring namespace)
+# - Cluster metrics and events enabled
+# - Pod and node logs enabled
+# - Application observability enabled (auto-instrumentation)
+# - Uses Alloy collectors (Grafana's OTEL-compatible collector)
+#
 
 {{- $km := $state.k8sMonitoring }}
 
@@ -28,6 +35,50 @@ spec:
     values:
       fullnameOverride: k8s-monitoring
       nameOverride: k8s-monitoring
+      # Cluster identification
+      cluster:
+        name: {{ $km.clusterName }}
+      # Destinations for telemetry data (assumes observability stack in same namespace)
+      destinations:
+        - name: prometheus
+          type: prometheus
+          url: "http://kube-prometheus-stack-prometheus.{{ $km.namespace }}:9090/api/v1/write"
+        - name: loki
+          type: loki
+          url: "http://loki.{{ $km.namespace }}:3100/loki/api/v1/push"
+        - name: tempo
+          type: otlp
+          url: "http://tempo.{{ $km.namespace }}:4317"
+          protocol: grpc
+      # Enable comprehensive Kubernetes monitoring features
+      clusterMetrics:
+        enabled: true
+      clusterEvents:
+        enabled: true
+      nodeLogs:
+        enabled: true
+      podLogs:
+        enabled: true
+      # Application observability with auto-instrumentation
+      applicationObservability:
+        enabled: true
+        receivers:
+          grpc:
+            enabled: true
+            port: 4317
+          http:
+            enabled: true
+            port: 4318
+      # Prometheus Operator integration (discover ServiceMonitors/PodMonitors)
+      prometheusOperatorObjects:
+        enabled: true
+      # Alloy collectors configuration
+      alloy-metrics:
+        enabled: true
+      alloy-logs:
+        enabled: true
+      alloy-receiver:
+        enabled: true
       {{- if $km.values }}
       {{- toYaml $km.values | nindent 6 }}
       {{- end }}
