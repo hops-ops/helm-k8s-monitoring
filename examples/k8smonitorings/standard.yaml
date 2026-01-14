@@ -1,0 +1,20 @@
+apiVersion: helm.hops.ops.com.ai/v1alpha1
+kind: K8sMonitoring
+metadata:
+  name: k8s-monitoring
+  namespace: example-env
+spec:
+  clusterName: example-cluster
+  labels:
+    team: platform
+  namespace: monitoring
+  values:
+    cluster:
+      name: example-cluster
+    externalServices:
+      prometheus:
+        host: https://prometheus.example.com
+      loki:
+        host: https://loki.example.com
+      tempo:
+        host: https://tempo.example.com

@@ -1,0 +1,38 @@
+# code: language=yaml
+#
+# Helm release for Grafana k8s-monitoring
+#
+
+{{- $km := $state.k8sMonitoring }}
+
+---
+apiVersion: helm.m.crossplane.io/v1beta1
+kind: Release
+metadata:
+  name: {{ $km.releaseName }}
+  annotations:
+    {{ setResourceNameAnnotation "helm-release-k8s-monitoring" }}
+  labels: {{ $km.labels | toJson }}
+spec:
+  managementPolicies: {{ $km.managementPolicies | toJson }}
+  forProvider:
+    chart:
+      name: k8s-monitoring
+      repository: https://grafana.github.io/helm-charts
+      version: 3.7.2
+    namespace: {{ $km.namespace }}
+    {{- if $km.overrideAllValues }}
+    values:
+      {{- toYaml $km.overrideAllValues | nindent 6 }}
+    {{- else }}
+    values:
+      fullnameOverride: k8s-monitoring
+      nameOverride: k8s-monitoring
+      {{- if $km.values }}
+      {{- toYaml $km.values | nindent 6 }}
+      {{- end }}
+    {{- end }}
+  rollbackLimit: 3
+  providerConfigRef:
+    name: {{ $km.providerConfigRef.name }}
+    kind: {{ $km.providerConfigRef.kind }}
