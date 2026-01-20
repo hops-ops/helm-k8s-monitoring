@@ -80,6 +80,8 @@ spec:
         enabled: true
       alloy-receiver:
         enabled: true
+      alloy-singleton:
+        enabled: true
       {{- if $km.values }}
       {{- toYaml $km.values | nindent 6 }}
       {{- end }}
