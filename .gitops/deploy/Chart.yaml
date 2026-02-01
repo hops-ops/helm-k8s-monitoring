@@ -1,5 +1,5 @@
 apiVersion: v2
 name: helm-k8s-monitoring
-version: 0.0.0
+version: 0.1.0
 description: GitOps packaging for the Grafana k8s-monitoring Crossplane configuration
 appVersion: 3.7.2
