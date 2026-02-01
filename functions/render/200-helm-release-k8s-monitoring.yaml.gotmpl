@@ -33,8 +33,6 @@ spec:
       {{- toYaml $km.overrideAllValues | nindent 6 }}
     {{- else }}
     values:
-      fullnameOverride: k8s-monitoring
-      nameOverride: k8s-monitoring
       # Cluster identification
       cluster:
         name: {{ $km.clusterName }}
