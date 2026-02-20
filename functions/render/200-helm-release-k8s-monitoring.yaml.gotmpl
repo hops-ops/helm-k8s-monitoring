@@ -23,9 +23,13 @@ spec:
     {{- if $km.overrideAllValues }}
     values:
       {{- toYaml $km.overrideAllValues | nindent 6 }}
-    {{- else if $km.values }}
+    {{- else }}
     values:
+      cluster:
+        name: {{ $km.clusterName }}
+      {{- if $km.values }}
       {{- toYaml $km.values | nindent 6 }}
+      {{- end }}
     {{- end }}
   rollbackLimit: 3
   providerConfigRef:

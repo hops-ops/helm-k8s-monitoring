@@ -33,6 +33,11 @@ _items = [
                     apiVersion = "helm.m.crossplane.io/v1beta1"
                     kind = "Release"
                     metadata.name = "test-k8s-monitoring"
+                    spec.forProvider.values = {
+                        cluster = {
+                            name = "test-cluster"
+                        }
+                    }
                 }
             ]
         }

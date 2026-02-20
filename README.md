@@ -22,8 +22,8 @@ spec:
 | `spec.namespace` | Namespace for the Helm release | `monitoring` |
 | `spec.name` | Helm release name | XR metadata.name |
 | `spec.labels` | Custom labels merged with defaults | `{}` |
-| `spec.values` | Helm values passed directly to the chart | `{}` |
-| `spec.overrideAllValues` | Helm values passed directly to the chart | `{}` |
+| `spec.values` | Helm values merged with default `cluster.name=spec.clusterName` | `{}` |
+| `spec.overrideAllValues` | Helm values passed directly to the chart (bypasses default `cluster.name`) | `{}` |
 | `spec.providerConfigRef.name` | ProviderConfig name | `clusterName` |
 | `spec.providerConfigRef.kind` | ProviderConfig kind | `ProviderConfig` |
 
