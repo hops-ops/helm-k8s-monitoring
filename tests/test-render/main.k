@@ -151,6 +151,127 @@ _items = [
             ]
         }
     }
+
+    # ==========================================================================
+    # Test 5: Custom release name via spec.name
+    # ==========================================================================
+    metav1alpha1.CompositionTest {
+        metadata.name = "custom-release-name"
+        spec = {
+            compositionPath = "apis/k8smonitorings/composition.yaml"
+            xrdPath = "apis/k8smonitorings/definition.yaml"
+            timeoutSeconds = 60
+            validate = False
+            xr = {
+                apiVersion = "helm.hops.ops.com.ai/v1alpha1"
+                kind = "K8sMonitoring"
+                metadata.name = "xr-name"
+                spec = {
+                    clusterName = "test-cluster"
+                    name = "my-release"
+                }
+            }
+            assertResources = [
+                {
+                    apiVersion = "helm.m.crossplane.io/v1beta1"
+                    kind = "Release"
+                    metadata.name = "my-release"
+                }
+            ]
+        }
+    }
+
+    # ==========================================================================
+    # Test 6: Custom providerConfigRef
+    # ==========================================================================
+    metav1alpha1.CompositionTest {
+        metadata.name = "custom-provider-config"
+        spec = {
+            compositionPath = "apis/k8smonitorings/composition.yaml"
+            xrdPath = "apis/k8smonitorings/definition.yaml"
+            timeoutSeconds = 60
+            validate = False
+            xr = {
+                apiVersion = "helm.hops.ops.com.ai/v1alpha1"
+                kind = "K8sMonitoring"
+                metadata.name = "provider-test"
+                spec = {
+                    clusterName = "test-cluster"
+                    providerConfigRef = {
+                        name = "shared-config"
+                        kind = "ClusterProviderConfig"
+                    }
+                }
+            }
+            assertResources = [
+                {
+                    apiVersion = "helm.m.crossplane.io/v1beta1"
+                    kind = "Release"
+                    metadata.name = "provider-test"
+                    spec.providerConfigRef = {
+                        name = "shared-config"
+                        kind = "ClusterProviderConfig"
+                    }
+                }
+            ]
+        }
+    }
+
+    # ==========================================================================
+    # Test 7: Status output from observed Helm release
+    # ==========================================================================
+    metav1alpha1.CompositionTest {
+        metadata.name = "status-from-observed-release"
+        spec = {
+            compositionPath = "apis/k8smonitorings/composition.yaml"
+            xrdPath = "apis/k8smonitorings/definition.yaml"
+            timeoutSeconds = 60
+            validate = False
+            xr = {
+                apiVersion = "helm.hops.ops.com.ai/v1alpha1"
+                kind = "K8sMonitoring"
+                metadata.name = "status-test"
+                spec = {
+                    clusterName = "test-cluster"
+                    namespace = "observability"
+                }
+            }
+            observedResources = [
+                {
+                    apiVersion = "helm.m.crossplane.io/v1beta1"
+                    kind = "Release"
+                    metadata = {
+                        name = "status-test"
+                        annotations = {
+                            "crossplane.io/composition-resource-name" = "helm-release-k8s-monitoring"
+                        }
+                    }
+                    status = {
+                        atProvider = {
+                            state = "deployed"
+                            revision = "1"
+                        }
+                        conditions = [
+                            {
+                                type = "Ready"
+                                status = "True"
+                                reason = "Available"
+                                lastTransitionTime = "2024-01-01T00:00:00Z"
+                            }
+                        ]
+                    }
+                }
+            ]
+            assertResources = [
+                {
+                    apiVersion = "helm.m.crossplane.io/v1beta1"
+                    kind = "Release"
+                    metadata.name = "status-test"
+                    spec.forProvider.namespace = "observability"
+                }
+            ]
+        }
+    }
 ]
 
 items = _items

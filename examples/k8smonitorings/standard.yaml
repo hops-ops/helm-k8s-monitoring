@@ -7,10 +7,7 @@ spec:
   clusterName: example-cluster
   labels:
     team: platform
-  namespace: monitoring
   values:
-    cluster:
-      name: example-cluster
     externalServices:
       prometheus:
         host: https://prometheus.example.com
