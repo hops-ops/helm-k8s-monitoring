@@ -31,32 +31,10 @@ spec:
         enabled: true
       clusterEvents:
         enabled: true
-      nodeLogs:
-        enabled: true
       podLogs:
         enabled: true
-      applicationObservability:
-      enabled: true
-      receivers:
-        otlp:
-          grpc:
-            enabled: true
-            port: 4317
-          http:
-            enabled: true
-            port: 4318
-      prometheusOperatorObjects:
+      annotationAutodiscovery:
         enabled: true
-      alloy-metrics:
-        enabled: true
-      alloy-logs:
-        enabled: true
-      alloy-receiver:
-        enabled: true
-      alloy-singleton:
-        enabled: true
-      nodeExporter:
-        enabled: false
       {{- if $km.values }}
       {{- toYaml $km.values | nindent 6 }}
       {{- end }}
