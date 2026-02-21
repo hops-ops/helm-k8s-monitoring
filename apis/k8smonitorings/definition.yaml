@@ -57,11 +57,11 @@ spec:
                 description: Helm release name. Defaults to the XR metadata.name.
                 type: string
               values:
-                description: Helm values merged with minimal defaults required by the chart (cluster.name from spec.clusterName).
+                description: Helm values rendered after inline defaults for a useful multi-signal baseline (cluster.name, prometheus/loki/tempo destinations, cluster/node/pod logs/events, applicationObservability, prometheusOperatorObjects, alloy logs/receiver/singleton, nodeExporter disabled).
                 type: object
                 x-kubernetes-preserve-unknown-fields: true
               overrideAllValues:
-                description: Helm values passed directly to the chart, replacing the default cluster.name behavior.
+                description: Helm values passed directly to the chart, replacing all defaults.
                 type: object
                 x-kubernetes-preserve-unknown-fields: true
           status:

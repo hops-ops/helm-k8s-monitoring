@@ -8,10 +8,10 @@ spec:
   labels:
     team: platform
   values:
-    externalServices:
-      prometheus:
-        host: https://prometheus.example.com
-      loki:
-        host: https://loki.example.com
-      tempo:
-        host: https://tempo.example.com
+    destinations:
+      - name: prometheus
+        type: prometheus
+        url: https://prometheus.example.com/api/v1/write
+      - name: loki
+        type: loki
+        url: https://loki.example.com/loki/api/v1/push

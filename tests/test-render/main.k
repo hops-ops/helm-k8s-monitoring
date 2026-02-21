@@ -37,6 +37,69 @@ _items = [
                         cluster = {
                             name = "test-cluster"
                         }
+                        destinations = [
+                            {
+                                name = "prometheus"
+                                type = "prometheus"
+                                url = "http://prometheus.monitoring:9090/api/v1/write"
+                            }
+                            {
+                                name = "loki"
+                                type = "loki"
+                                url = "http://loki.monitoring:3100/loki/api/v1/push"
+                            }
+                            {
+                                name = "tempo"
+                                type = "otlp"
+                                url = "http://tempo.monitoring:4317"
+                                protocol = "grpc"
+                            }
+                        ]
+                        clusterMetrics = {
+                            enabled = True
+                        }
+                        "alloy-metrics" = {
+                            enabled = True
+                        }
+                        clusterEvents = {
+                            enabled = True
+                        }
+                        nodeLogs = {
+                            enabled = True
+                        }
+                        podLogs = {
+                            enabled = True
+                        }
+                        applicationObservability = {
+                            enabled = True
+                            receivers = {
+                                otlp = {
+                                    grpc = {
+                                        enabled = True
+                                        port = 4317
+                                    }
+                                    http = {
+                                        enabled = True
+                                        port = 4318
+                                    }
+                                }
+                            }
+                        }
+                        prometheusOperatorObjects = {
+                            enabled = True
+                        }
+                        "alloy-logs" = {
+                            enabled = True
+                        }
+                        "alloy-singleton" = {
+                            enabled = True
+                        }
+                        "alloy-receiver" = {
+                            enabled = True
+                        }
+                        nodeExporter = {
+                            enabled = False
+                        }
                     }
                 }
             ]

@@ -27,14 +27,47 @@ spec:
     values:
       cluster:
         name: {{ $km.clusterName }}
+      destinations:
+      - name: prometheus
+        type: prometheus
+        url: "http://prometheus.{{ $km.namespace }}:9090/api/v1/write"
+      - name: loki
+        type: loki
+        url: "http://loki.{{ $km.namespace }}:3100/loki/api/v1/push"
+      - name: tempo
+        type: otlp
+        url: "http://tempo.{{ $km.namespace }}:4317"
+        protocol: grpc
       clusterMetrics:
+        enabled: true
+      alloy-metrics:
         enabled: true
       clusterEvents:
         enabled: true
+      nodeLogs:
+        enabled: true
       podLogs:
         enabled: true
-      annotationAutodiscovery:
+      applicationObservability:
         enabled: true
+        receivers:
+          otlp:
+            grpc:
+              enabled: true
+              port: 4317
+            http:
+              enabled: true
+              port: 4318
+      prometheusOperatorObjects:
+        enabled: true
+      alloy-logs:
+        enabled: true
+      alloy-singleton:
+        enabled: true
+      alloy-receiver:
+        enabled: true
+      nodeExporter:
+        enabled: false
       {{- if $km.values }}
       {{- toYaml $km.values | nindent 6 }}
       {{- end }}
